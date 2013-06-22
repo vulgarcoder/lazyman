@@ -6,7 +6,7 @@ source "http://ruby.taobao.org"
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 gem "rspec", "~> 2.13.0"
-gem "page-object", "~> 0.8.6.1"
+gem "page-object", ">= 0.8.6.1"
 gem "thor", "~> 0.14.6"
 gem "active_support", "~> 3.0.0"
 
