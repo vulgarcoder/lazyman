@@ -1,7 +1,7 @@
 require 'lazyman/errors'
 module Lazyman
 	class Page
-		include PageObject	
+		include PageObject
 
 		def method_missing(m, *args, &blk)
 			if @browser.respond_to? m
@@ -9,14 +9,14 @@ module Lazyman
 			else
 				super
 			end #if
-		end 
+		end
 
 		def turn_to kls
 			raise InvalidLazymanPageError unless kls <= Lazyman::Page
 			kls.new(@browser)
 		end
 
-		def data_driven hash, &blk
+		def data_driven hash
 			raise ArgumentError unless hash.is_a?(Hash)
 			hash.each do |mtd, data|
 				m_with_eql = (mtd.to_s + '=').to_sym
@@ -24,10 +24,14 @@ module Lazyman
 					#self.send(m_with_eql, data)
 					eval "self.#{m_with_eql.to_s}(data)"
 				elsif respond_to?(mtd.to_sym)
-					self.send(mtd.to_sym).send(data.to_sym) 
+					if(data.nil?||data.empty?) then
+						self.send(mtd.to_sym)
+					else
+						self.send(mtd.to_sym).send(data.to_sym)
+					end
 				end #if
 			end #each
-			class_eval &blk if block_given?
+			yield(self) if block_given?
 		end
 
 	end #Page
